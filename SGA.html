@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<body> 
+
+<h1>Simple Genetic Algorithm</h1>
+
+<p id="demo">This web page hosts a deomstration of a simple genetic algorithm (GA).</p>
+<p>GAs work by testing populations of candidate solutions to a problem and then trying to combine parts of the solutions that are better than average.</p>
+<form>
+Starting population size:
+<input type="text" id="popSizeText" name="PopSize" value="10"/><br/>
+<br />
+genome size:
+<input type="text" id="indSizeText" name="IndSize" value="10"/><br/>
+Max evaluations:
+<input type="text" id="maxEvalText" name="MaxEval" value="10"/><br/>
+Mutation Rate:
+<input type="text" id="mutationRateText" name="mutationRate" value="0.05"/><br/>
+Tournament Size
+<input type="text" id="tournamentSizeText" name="tournamentSize" value="5"/><br/>
+Max Births
+<input type="text" id="maxBirthsText" name="maxBirths" value="5"/><br/>
+Max Deaths
+<input type="text" id="maxDeathsText" name="maxDeaths" value="5"/><br/>
+Statistics every 
+<input type="text" id="reportEveryText" name="reportEvery" value="10"/> evaluations<br/>
+Runs to average
+<input type="text" id="maxRunsText" name="maxRuns" value="10"/><br/>
+Max Reporting Detail
+<input type="text" id="maxReportingText" name="maxReporting" value="0"/><br/>
+<button onclick="startWorker()">Start Experiment</button> 
+<button onclick="stopWorker()">Stop Experiment</button>
+</form> 
+
+<table>
+<tr>
+<tr>
+   <th>Console</th>
+   <th>Results</th>
+   <th>Errors</th>
+ </tr>
+	<td>
+		<div id="myConsole"></div>
+	</td>
+	<td>
+		<div id="myResults"></div>
+	</td>
+	<td>
+		<div id="myErr"></div>
+	</td>
+</table>
+
+
+<script src="SGA Web Worker.js"></script>
+<script>
+var w;
+
+function startWorker() {
+	//reset output elements
+    document.getElementById("myResults").innerHTML = "";
+    document.getElementById("myConsole").innerHTML = "";
+	// check for Web Worker support
+    if(typeof(Worker) !== "undefined") { // supported
+        if(typeof(w) == "undefined") { // not yet instantiated
+            w = new Worker("SGA Web Worker.js");
+			// now send parameters of GA experiment and start experiment
+			w.postmessage( {'param': 'popSize', 'value': Number(document.getElementById("popSizeText").value)} );
+			w.postmessage( {'param':  'indSize', 'value': Number(document.getElementById("indSizeText").value)} );
+			w.postmessage( {'param':  'maxEval', 'value': Number(document.getElementById("maxEvalText").value)} );
+			w.postmessage( {'param':  'mutationRate', 'value': Number(document.getElementById("mutationRateText").value)} );
+			w.postmessage( {'param':  'tournamentSize', 'value': Number(document.getElementById("tournamentSizeText").value)} );
+			w.postmessage( {'param':  'maxBirths', 'value': Number(document.getElementById("maxBirthsText").value)} );
+			w.postmessage( {'param':  'maxDeaths', 'value': Number(document.getElementById("maxDeathsText").value)} );
+			w.postmessage( {'param':  'reportEvery', 'value': Number(document.getElementById("reportEveryText").value)} );
+			w.postmessage( {'param':  'maxRuns', 'value': Number(document.getElementById("maxRunsText").value)} );
+			w.postmessage( {'param':  'maxReporting', 'value': Number(document.getElementById("maxReportingText").value)} );
+
+        }
+        w.onmessage = function(event) {
+			var data = event.data;
+		  switch (data.cmd) {
+			case 'console':
+              document.getElementById("myConsole").innerHTML += event.msg;
+			  break;
+			case 'results':
+              document.getElementById("myResults").innerHTML += event.msg;
+			  break;
+			default:
+              document.getElementById("myErr").innerHTML += event.msg;
+			};
+        };
+    } else {
+        document.getElementById("result").innerHTML = "Sorry! No Web Worker support.";
+    }
+}
+
+function stopWorker() { 
+    w.terminate();
+    w = undefined;
+}
+</script>
+
+</body>
+</html>
