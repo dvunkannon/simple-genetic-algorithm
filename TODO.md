@@ -15,13 +15,13 @@
 - [ ]		binInt
 - [ ]			Gray Code
 - [ ]		deceptive
-- [ ]		(other test suite functions)
+- [ ]		other test suite functions
 - [ ]		TSP
 - [ ]		json journaling for later analysis, reproducibility
-		genotype statistics
-		EDA
+- [ ]		genotype statistics
+- [ ]		EDA
 		
-		salting initial population with building blocks
-		rearrangement of genes to reduce  bb length
-		rearrangement of genes to increse bb length
+- [ ]		salting initial population with building blocks
+- [ ]		rearrangement of genes to reduce  bb length
+- [ ]		rearrangement of genes to increse bb length
 */
