@@ -1,0 +1,50 @@
+/* Parameter template for NEMO evolutionary computation
+	If writing code to read these files, pass the files through JSmin to strip comments before parsing.
+	Some parsers or browsers may accept comments, but they are not legal JSON syntax.
+*/
+{
+	population: {
+		"initialPopSize": 10,			// initial population size
+		"subproblemSize": 1,			// size (in bits) of a subproblem
+		"numberOfSubproblems": 10,		// number of subproblems. Multiply by subproblem size to get the genome size of each individual in the population.
+		"subproblemType": "OneMax",		// the name of the subproblem, OneMax, BinInt, Deceptive, etc. TODO: name of eval function for the subproblem.
+		"maxBirths": 5,					// number of individuals to add in one batch
+		"maxDeaths": 5,					// number of individuals to remove in one batch
+		"maxAge": 1,					// remove all individuals older than this number from the population.
+		"carryingCapacity": 20,			// maximum population size
+		"growthRate": 2.0,				// population growth rate
+		"growthFunction": "Ricker"		// choice of Ricker, logistic map
+		
+	},
+	parameters: {
+		"crossoverRate": 1.0,			// rate at which to use crossover to generate a new individual
+		"mutationRate": 0.05,			// mutation probability for each bit in a new individual
+		"tournamentSize": 5				// number of individuals chosen at random for tournament selection algorithm
+	},
+	reporting: {
+		"maxEval": 100,					// maximum number of evaluations allowed in each run
+		"numRuns": 10,					// number of runs to average together for statistics
+		"reportEvery": 10,				// reporting period (number of evaluations) for statistics of a run - current high, average, low score
+		"maxReporting": 0				// highest level of reporting statistics to generate 0=none 9=full debug
+	}
+}
+
+/* 
+	actualPopSize = initialPopSize
+	Loop {
+		oldPopFraction = actualPopSize / carryingCapacity
+		if( oldPopFraction > 1.0 ) oldPopFraction = 1.0	//sanity check, since the fraction can never be more than 1
+		if ( growthFunction == "Ricker" )		//Ricker model
+			newPopFraction = oldPopFraction * Math.exp( growthRate * ( 1 - ( oldPopFraction / carryingCapacity ) ) )
+		else if( growthFunction == "logistic" )	//logistic map
+			newPopFraction = growthRate * oldPopFraction * ( 1 - oldPopFraction )
+		
+		newPopSize = newPopFraction * carryingCapacity
+		// now modify population to reflect new population size
+		if( newPopSize > actualPopSize ) births( newPopSize - actualPopSize )
+		else if( newPopSize < actualPopSize ) deaths( actualPopSize - newPopSize )
+		// ageing deaths?
+		actualPopSize = newPopSize
+	}
+	
+*/	
