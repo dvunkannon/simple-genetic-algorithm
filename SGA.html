@@ -6,6 +6,39 @@
 $(document).ready(function(){
 
    // jQuery methods go here...
+   /* Parameter template for NEMO evolutionary computation
+	If writing code to read these files, pass the files through JSmin to strip comments before parsing.
+	Some parsers or browsers may accept comments, but they are not legal JSON syntax.
+*/
+var params;
+params = {
+	population: {
+		"initialPopSize": 10,			// initial population size
+		"subproblemSize": 1,			// size (in bits) of a subproblem
+		"numberOfSubproblems": 10,		// number of subproblems. Multiply by subproblem size to get the genome size of each individual in the population.
+		"subproblemType": "BinInt",		// the name of the subproblem, BinInt, Deceptive, etc. TODO: name of eval function for the subproblem.
+		"subproblemAggregationMethod": "sum",	// choice of sum, avg, min, max
+		"maxBirths": 5,					// number of individuals to add in one batch
+		"maxDeaths": 5,					// number of individuals to remove in one batch
+		"maxAge": 1,					// remove all individuals older than this number from the population.
+		"carryingCapacity": 20,			// maximum population size
+		"growthRate": 2.0,				// population growth rate
+		"growthFunction": "Ricker"		// choice of Ricker, logistic map
+		
+	},
+	parameters: {
+		"crossoverRate": 1.0,			// rate at which to use crossover to generate a new individual
+		"mutationRate": 0.05,			// mutation probability for each bit in a new individual
+		"tournamentSize": 5				// number of individuals chosen at random for tournament selection algorithm
+	},
+	reporting: {
+		"maxEval": 100,					// maximum number of evaluations allowed in each run
+		"numRuns": 10,					// number of runs to average together for statistics
+		"reportEvery": 10,				// reporting period (number of evaluations) for statistics of a run - current high, average, low score
+		"maxReporting": 0				// highest level of reporting statistics to generate 0=none 9=full debug
+	}
+}
+
 
 });
 </script>
@@ -66,6 +99,7 @@ Max Reporting Detail
 var w;
 
 function startWorker() {
+	/* global params */
 	//reset output elements
     document.getElementById("myResults").innerHTML = "";
     document.getElementById("myConsole").innerHTML = "";
@@ -74,16 +108,7 @@ function startWorker() {
         if(typeof(w) == "undefined") { // not yet instantiated
             w = new Worker("SGA Web Worker.js");
 			// now send parameters of GA experiment and start experiment
-			w.postmessage( {'param': 'popSize', 'value': Number(document.getElementById("popSizeText").value)} );
-			w.postmessage( {'param':  'indSize', 'value': Number(document.getElementById("indSizeText").value)} );
-			w.postmessage( {'param':  'maxEval', 'value': Number(document.getElementById("maxEvalText").value)} );
-			w.postmessage( {'param':  'mutationRate', 'value': Number(document.getElementById("mutationRateText").value)} );
-			w.postmessage( {'param':  'tournamentSize', 'value': Number(document.getElementById("tournamentSizeText").value)} );
-			w.postmessage( {'param':  'maxBirths', 'value': Number(document.getElementById("maxBirthsText").value)} );
-			w.postmessage( {'param':  'maxDeaths', 'value': Number(document.getElementById("maxDeathsText").value)} );
-			w.postmessage( {'param':  'reportEvery', 'value': Number(document.getElementById("reportEveryText").value)} );
-			w.postmessage( {'param':  'maxRuns', 'value': Number(document.getElementById("maxRunsText").value)} );
-			w.postmessage( {'param':  'maxReporting', 'value': Number(document.getElementById("maxReportingText").value)} );
+			w.postmessage( {'param': 'start', 'value': params} );
 
         }
         w.onmessage = function(event) {
