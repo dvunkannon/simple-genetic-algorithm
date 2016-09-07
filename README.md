@@ -2,7 +2,7 @@
 A demonstration of genetic algorithms in Javascript. By hosting the code on an Html 5 and Javascript platform, I hope to make the code more accessible and easier for users to change.
 
 Q. Why not Java?
-A. There are a lot of GA demos in Java. However, running Java applets is somewhat less common now that Java security problems have led many to uninstall Java. JavaScript remains ubiquitous in the moden HTML 5 environment.
+A. There are a lot of GA demos in Java. However, running Java applets is somewhat less common now that Java security problems have led many to uninstall Java. JavaScript remains ubiquitous in the modern HTML 5 environment.
 
 The project aims to demonstrate best practices in HTML development in addition to the raw GA code. This includes the use of JQuery and JSON files for parameter settings.
 
