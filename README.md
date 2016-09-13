@@ -15,16 +15,12 @@ The project also aims to associate population size with problem size. Many demon
 In summary, the project aims to go beyond a clear and effective demonstration of the algorithm to explore why you would want to use such an algorith in the first place, and what are some of the tradeoffs involved.
 
 Lessons learned
-	Putting the web worker script in a separate file means you must use a web server,
-	even just a local one, to deliver the page to the browser. You can't read from file:// to open
-	the page because you won't be able to read the web worker .js file from local storage due to 
-	security resrictions.
-	You also need to make sure your web server is set up to work effectively as a 
-	development environment. In particular, the server should tell the browser not to cache
-	HTML, JavaScript, or CSS files. The following instructions can be added to your httpd.conf
-	or similar server config file. If you are not sure what to do, get help. This is copied from 
-	a few spots on the web, and some of the headers listed try to handle very old browser and http 
-	combinations.
+
+Putting the web worker script in a separate file means you must use a web server, even just a local one, to deliver the page to the browser. You can't read from file:// to open the page because you won't be able to read the web worker .js file from local storage due to security resrictions.
+
+You also need to make sure your web server is set up to work effectively as a development environment. In particular, the server should tell the browser not to cache HTML, JavaScript, or CSS files. The following instructions can be added to your httpd.conf
+or similar server config file. If you are not sure what to do, get help. This is copied from a few spots on the web, and some of the headers listed try to handle very old browser and http combinations.
+
 <filesMatch "\.(html|js|css)$">
   FileETag None
   Header unset ETag
